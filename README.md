@@ -37,3 +37,22 @@ You can use arrows to run and kill aliens.
 *Choice of character
 ###
 *Maybe something else
+###
+**Plan of works**
+=====================
+I 
+1) Preparing instruments().
+###
+2) Trying to realize simple hero, as a  round.()
+###
+3) Preparing images for playground, grounds, heroes, aliens, and other needed subjects.()
+###
+4) Realization all heroes in their natural appearance()
+###
+5) Realization interaction between heroes().
+###
+6) Adding sounds().
+###
+7) Project completion and surrender.
+###
+And finaly I ask you to pay attention to the fact that I have never written such a grandiose project and can not quite soberly evaluate my actions.
