@@ -12,47 +12,49 @@ You can use arrows to run and kill aliens.
 ###
 **Engine and Graphics**
 =====================
-*I want to make my own game engine.
+## I want to make my own game engine, based on [SFML Graphics library](https://www.sfml-dev.org/).
 ###
-*Based on [SFML Graphics library](https://www.sfml-dev.org/).
+## 2D Graphics.
 ###
-*2D Graphics.
-###
-*View from above
+## View from above.
 ###
 **Using**
 =====================
-*SFML
+## >SFML
 ###
-*Some more later
+## >Some more later
 ###
 **Facilities**
 =====================
-*Moving
+## >Moving
 ###
-*Sounds
+## >Sounds
 ###
-*Menu
+## >Menu
 ###
-*Choice of character
+## >Choice of character
 ###
-*Maybe something else
+## >Maybe something else
 ###
 **Plan of works**
-=====================
-I 
-1) Preparing instruments().
+======================
+## 1) Preparing instruments(1 - ... week).
 ###
-2) Trying to realize simple hero, as a  round.()
+## 2) Trying to realize simple hero, as a  round.()
 ###
-3) Preparing images for playground, grounds, heroes, aliens, and other needed subjects.()
+## 3) Preparing images for playground, grounds, heroes, aliens, and other needed subjects.()
 ###
-4) Realization all heroes in their natural appearance()
+## 4) Realization all heroes in their natural appearance()
 ###
-5) Realization interaction between heroes().
+## 5) Realization interaction between heroes().
 ###
-6) Adding sounds().
+## 6) Adding sounds().
 ###
-7) Project completion and surrender.
+## 7) Project completion and surrender.
 ###
-And finaly I ask you to pay attention to the fact that I have never written such a grandiose project and can not quite soberly evaluate my actions.
+**History**
+======================
+## 1 week:
+###     - I've mastered classes and templates in c++ and tried to realise simple stack and vector classes.
+###     - I've instaled [SFML](https://www.sfml-dev.org/) and working on the connection it with Xcode. 
+
