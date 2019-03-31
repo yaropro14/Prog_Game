@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <string>
 
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+
 class Map
 {
 public:
@@ -21,6 +24,7 @@ public:
     static Map * inst;
     static Map * Get();
     int x_size, y_size;
+    sf::Sprite sand;
 };
 
 #endif /* Map_Objects_hpp */

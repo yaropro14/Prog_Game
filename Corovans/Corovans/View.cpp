@@ -30,7 +30,7 @@ View::View()
 {
     //printf("create\n");
     //printf("create\n");
-    window.create(sf::VideoMode(2160, 1350), "Corovans");
+    window.create(sf::VideoMode(3360, 2100), "Corovans", sf::Style::Fullscreen);
     Sizeofwin();
     struct sigaction sa = {0};
     sa.sa_handler = Sizechange;
@@ -53,6 +53,7 @@ void View::Run()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        //printf("1\n");
         Draw();
     }
 }
@@ -72,8 +73,8 @@ void View::Sizeofwin()
 {
     struct winsize size;
     ioctl(1, TIOCGWINSZ, &size);
-    x_size = 2160;// (size.ws_col / 60) * 60;
-    y_size = 1350;// (size.ws_row / 60) * 60;
+    x_size = 3360;// (size.ws_col / 60) * 60;
+    y_size = 2100;// (size.ws_row / 60) * 60;
     
     x_squares = x_size / 60;
     y_squares = y_size / 60;
@@ -100,6 +101,7 @@ void View::Draw()
 void View::DrawBackground()
 {
     sf::Texture sand_texture;
+    sand_texture.create(60, 60);
     sand_texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Sand.png");
     sf::Sprite sand;
     sand.setTexture(sand_texture);
@@ -110,19 +112,19 @@ void View::DrawBackground()
     //printf("x = %d, y = %d\n", x_squares, y_squares);
     //for(int i = 0; y < y + y_squares; y ++, i++)
     //for(int j = 0; x < x + x_squares; x ++, j++) {
-    for(int i = 0; i < y_squares; i++)
-    for(int j = 0; j <x_squares; j++) {
-        //printf("x = %d, y = %d\n", x, y);
-        int c = 0;
-        //scanf("%d", &c);
-
-        sand.setPosition(j * 60, i * 60);
-
-        window.draw(sand);
-        window.display();
- 
-    }
-    
+    for(int i = 0; i < y_squares; i++) //y_squares
+        for(int j = 0; j < x_squares; j++) {//x_squares
+            //printf("j = %d, i = %d\n", j, i);
+            //int c = 0;
+            //scanf("%d", &c);
+            
+            sand.setPosition(j * 60, i * 60);
+            
+            window.draw(sand);
+            //window.display();
+            
+        }
+    window.display();
 }
 
 
