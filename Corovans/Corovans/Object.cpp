@@ -7,6 +7,7 @@
 //
 
 #include "Object.hpp"
+#include "Game.hpp"
 
 
 Object::Object()
@@ -22,9 +23,12 @@ Pyramid::Pyramid(Coord c)
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Pyramid.png");
     sprite.setTexture(texture);
     
-    for(int j = 0; j < 10; j ++)
-        for(int i = 0; i < 8; i ++)
-            body.push_back(Coord(c.first + i, c.second + j));
+    x_size =  299 / CELL_SIZE;
+    y_size =  299 / CELL_SIZE;
+    z_size =  260 / CELL_SIZE;
+    
+    position = c;
+    
 }
 
 Pyramid::~Pyramid()
@@ -37,9 +41,11 @@ Scelet::Scelet(Coord c)
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Scelet.png");
     sprite.setTexture(texture);
     
-    for(int j = 0; j < 4; j ++)
-        for(int i = 0; i < 6; i ++)
-            body.push_back(Coord(c.first + i, c.second + j));
+    x_size =  78 / CELL_SIZE;
+    y_size =  78 / CELL_SIZE;
+    z_size =  91 / CELL_SIZE;
+    
+    position = c;
 }
 
 Scelet::~Scelet()
@@ -52,8 +58,11 @@ Stone::Stone(Coord c)
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/S_stone.png");
     sprite.setTexture(texture);
     
-    for(int i = 0; i < 4; i ++)
-        body.push_back(Coord(c.first + i, c.second));
+    x_size =  65 / CELL_SIZE;
+    y_size =  65 / CELL_SIZE;
+    z_size =  52 / CELL_SIZE;
+    
+    position = c;
 }
 
 Stone::~Stone()
@@ -66,7 +75,11 @@ Greenery::Greenery(Coord c)
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Greenery.png");
     sprite.setTexture(texture);
 
-    body.push_back(Coord(c.first, c.second));
+    x_size =  104 / CELL_SIZE;
+    y_size =  309 / CELL_SIZE;
+    z_size =  286 / CELL_SIZE;
+    
+    position = c;
 }
 
 Greenery::~Greenery()
@@ -79,9 +92,11 @@ Tree::Tree(Coord c)
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/DryTree.png");
     sprite.setTexture(texture);
     
-    for(int j = 0; j < 4; j ++)
-        for(int i = 0; i < 6; i ++)
-            body.push_back(Coord(c.first + i, c.second + j));
+    x_size =  91 / CELL_SIZE;
+    y_size =  91 / CELL_SIZE;
+    z_size =  338 / CELL_SIZE;
+    
+    position = c;
 }
 
 Tree::~Tree()

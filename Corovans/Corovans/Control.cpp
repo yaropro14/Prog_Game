@@ -12,7 +12,7 @@
 Control::Control(Character * c)
 {
     View * v = View::Get();
-    v->setonkey(this);
+    v->SetOnKey(this);
     character = c;
 }
 

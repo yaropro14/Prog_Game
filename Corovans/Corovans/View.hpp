@@ -13,9 +13,11 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "Map&Objects.hpp"
 #include "Game.hpp"
 #include "Keypressable.hpp"
+
+
+using movable = std::function<void()>;
 
 
 class View
@@ -28,9 +30,22 @@ public:
     static View * Get();
     
     Keypressable * onkey_delegater;
-    void setonkey(Keypressable * key)
+    std::list <std::pair < long, movable>> ontime_deligater;
+    
+    void SetOnKey(Keypressable * key)
     {
         onkey_delegater = key;
+    }
+    
+    void SetOnTimer(struct timespec timeout, movable t)
+    {
+        std::pair <long , movable> n;
+        
+        n.first = timeout.tv_nsec / 1000000 + timeout.tv_sec * 1000;
+        n.second = t;
+        
+        //if(ontime_deligater.front().first >= n.first) ontime_deligater.push_front(n);
+        ontime_deligater.push_back(n);
     }
     
     void set_model(Game * g) {
@@ -40,23 +55,24 @@ public:
     void Run();
     void Draw();
     void Sizeofwin();
+    void SetScreenPosition();
     
-    void DrawBackground();
-    
-    void CharacterPainter(sf::Sprite s, Coord c, int h);
     void CamelPainter(Coord c, L_R_Dir d);
-    void ObjectPainter(Object o);
+    void MapPainter(sf::Sprite sprite, Coord c);
+    void ObjectPainter(sf::Sprite s, Coord c, int h);
     
     sf::RenderWindow window;
     int x_size, y_size;
     
-    int elem_size;
+    //int elem_size;
+    
+    int cell_size;
+    int x_cells, y_cells;
+    Coord screen_position;
     
 private:
     Map * map;
     Game * game;
-    int square_size;
-    int x_squares, y_squares;
 };
 
 

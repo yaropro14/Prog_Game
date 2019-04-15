@@ -27,16 +27,17 @@ int main()
     
     ControlHuman h(c);
     
-    Object * pyr = new Pyramid(Coord(1000, 600));
-    Object * gre = new Greenery(Coord(2300, 1110));
-    Object * sto = new Stone(Coord(1400,1200));
-    //Object * tre = new Tree(Coord(500, 300));
-    Object * sce = new Scelet(Coord(3000, 700));
+    Object * pyr = new Pyramid(Coord(400, 800));
+    Object * gre = new Greenery(Coord(2000, 600));
+    Object * sto = new Stone(Coord(600,1600));
+    Object * tre = new Tree(Coord(3000, 1400));
+    Object * sce = new Scelet(Coord(1500, 1300));
     
     g->AddObject(pyr);
     g->AddObject(gre);
     g->AddObject(sto);
     g->AddObject(sce);
+    g->AddObject(tre);
     
     //v->Draw();
     v->Run();

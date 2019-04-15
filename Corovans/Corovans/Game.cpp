@@ -7,10 +7,12 @@
 //
 
 #include "Game.hpp"
+#include "View.hpp"
 
 
 Game::Game()
 {
+    map = new Map();
 }
 
 
@@ -18,35 +20,35 @@ void Game::CharacterPaint(CharacterPainter p)
 {
     switch (character->dir) {
         case ST_BACK:
-            character->sprite.setTextureRect(sf::IntRect(0, 1367, 81, 184));
+            character->sprite.setTextureRect(sf::IntRect(10, 595, 86, 195));
             break;
             
         case ST_FORWARD:
-            character->sprite.setTextureRect(sf::IntRect(182, 1367, 77, 178));
+            character->sprite.setTextureRect(sf::IntRect(194, 595, 78, 178));
             break;
             
         case ST_LEFT:
-            character->sprite.setTextureRect(sf::IntRect(104, 1367, 57, 180));
+            character->sprite.setTextureRect(sf::IntRect(115, 595, 60, 180));
             break;
             
         case ST_RIGHT:
-            character->sprite.setTextureRect(sf::IntRect(161, 1367, -57, 180));
+            character->sprite.setTextureRect(sf::IntRect(175, 595, -60, 180));
             break;
             
         case BACK:
-            character->sprite.setTextureRect(sf::IntRect(0, 1367, 81, 184));
+            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 0, 100, 190));
             break;
             
         case FORWARD:
-            character->sprite.setTextureRect(sf::IntRect(182, 1367, 77, 178));
+            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 205, 100, 187));
             break;
             
         case LEFT:
-            character->sprite.setTextureRect(sf::IntRect(104, 1367, 57, 180));
+            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 394, 100, 183));
             break;
             
         case RIGHT:
-            character->sprite.setTextureRect(sf::IntRect(161, 1367, -57, 180));
+            character->sprite.setTextureRect(sf::IntRect(100 * (character->step + 1), 394, -100, 183));
             break;
             
             
@@ -54,7 +56,7 @@ void Game::CharacterPaint(CharacterPainter p)
             break;
     }
     
-    p(character->sprite, character->body.front(), character->height);
+    p(character->sprite, character->position, character->z_size);
 }
 
 
@@ -68,10 +70,9 @@ void Game::CamelPaint(CamelPainter p)
     //}
 }
 
-void Game::ObjectsPaint(ObjectPainter p)
+void Game::ObjectsPaint(Object * o ,ObjectPainter p)
 {
-    for(auto s : objects)
-        p(*s);
+        p(o->sprite, o->position, o->z_size);
 }
 
 void Game::AddObject(Object * o)
@@ -95,6 +96,20 @@ void Game::Move()
 }
 
 
+void Game::MapPaint(MapPainter p, Coord c)
+{
+    for(int y = c.second, j = 0; j < map->y_size; y += map->size_in_cell, j+= map->size_in_cell)
+        for(int x = c.first, i = 0; i < map->y_size; x += map->size_in_cell, i+= map->size_in_cell){
+            if(y == 0 || x == 0)
+                p(map->stone, Coord(i, j));
+            //else if(y >= Y_SIZE - 170 || x >= X_SIZE - 170)
+                //p(map->stone, Coord(i, j));
+            else
+                p(map->sand, Coord(i, j));;
+        }
+}
+
+
 Game::~Game()
 {
 }
@@ -105,24 +120,51 @@ Character::Character()
     texture.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/HumanRun.png");
     sprite.setTexture(texture);
     
-    height = 175;
+    z_size = 182 / CELL_SIZE;
+    x_size = 100 / CELL_SIZE;
+    y_size = 90 / CELL_SIZE;
     
     //std::list <Coord> position;
     
-    dir = ST_FORWARD;
+    dir = ST_BACK;
     step = 0;
+    speed = 10;
     
-    Coord c {2, 7};
+    Game * g =  Game::Get();
     
-    for(int i = 0; i < 2; i ++)
-        for(int j = 0; j < 5; j ++)
-            body.push_back(Coord(c.first + j, c.second + i));
+    position.first = g->map->size_in_cell;
+    position.second = g->map->size_in_cell + z_size;
     
 }
 
 
 void Character::SetDirection(Dir d)
 {
+    if(dir != d)    step = 0;
+    /*
+    if(d == NO) {
+        switch (dir) {
+            case BACK:
+                dir = ST_BACK;
+                break;
+                
+            case LEFT:
+                dir = ST_LEFT;
+                break;
+                
+            case FORWARD:
+                dir = ST_FORWARD;
+                break;
+                
+            case RIGHT:
+                dir = ST_RIGHT;
+                break;
+                
+            default:
+                break;
+        }
+    }*/
+    
     dir = d;
 }
 
@@ -131,23 +173,31 @@ void Character::Move()
 {
     switch (dir) {
         case FORWARD:
-            body = ChangePosition(body, 0, -1);
-            dir = ST_FORWARD;
+            position = ChangePosition(position, 0, -speed);
+            step ++;
+            step = step % 8;
+            dir = FORWARD;
             break;
             
         case BACK:
-            body = ChangePosition(body, 0, 1);
-            dir = ST_BACK;
+            position = ChangePosition(position, 0, speed);
+            step ++;
+            step = step % 8;
+            dir = BACK;
             break;
             
         case LEFT:
-            body = ChangePosition(body, -1, 0);
-            dir = ST_LEFT;
+            position = ChangePosition(position, -speed, 0);
+            step ++;
+            step = step % 8;
+            dir = LEFT;
             break;
             
         case RIGHT:
-            body = ChangePosition(body, 1, 0);
-            dir = ST_RIGHT;
+            position = ChangePosition(position, speed, 0);
+            step ++;
+            step = step % 8;
+            dir = RIGHT;
             break;
             
         default:
@@ -157,30 +207,12 @@ void Character::Move()
 }
 
 
-std::list <Coord> ChangePosition(std::list <Coord> body, int x, int y)
+Coord ChangePosition(Coord position, int x, int y)
 {
-    int n = (int) body.size();
+    position.first += x;
+    position.second += y;
     
-    for(int i = 0; i < n; i++) {
-        
-        //printf("i = %d \n", i);
-        
-        //int o = 0;
-        //scanf("%d", &o);
-        
-        if(i > n)
-        {
-            break;
-        }
-        
-        Coord n = body.front();
-        body.pop_front();
-        n.first += x;
-        n.second += y;
-        body.push_back(n);
-    }
-    
-    return body;
+    return position;
 }
 
 
@@ -216,5 +248,27 @@ Camel::Camel()
 
 
 Camel::~Camel()
+{
+}
+
+
+Map::Map()
+{
+    x_size = X_SIZE;
+    y_size = Y_SIZE;
+    
+    background.loadFromFile("/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Bacground.png");
+    sand.setTexture(background);
+    sand.setTextureRect(sf::IntRect(0, 0, 70, 70));
+    
+    stone.setTexture(background);
+    stone.setTextureRect(sf::IntRect(70, 0, 70, 70));
+    
+    sf::Vector2u size = background.getSize();
+    
+    size_in_cell = size.y / CELL_SIZE;//View::Get()->cell_size;
+}
+
+Map::~Map()
 {
 }

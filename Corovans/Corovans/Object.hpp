@@ -26,7 +26,11 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
     
-    std::list <Coord> body;
+    Coord position;
+    
+    unsigned int x_size;
+    unsigned int y_size;
+    unsigned int z_size;
 };
 
 class Pyramid : public Object

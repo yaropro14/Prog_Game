@@ -16,10 +16,7 @@ using namespace std::placeholders;
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-#include "Map&Objects.hpp"
 #include "Game.hpp"
-
-
 #include "View.hpp"
 
 
@@ -28,18 +25,14 @@ static void Sizechange(int y);
 
 View::View()
 {
-    //printf("create\n");
-    //printf("create\n");
-    square_size = 70;
+    cell_size = CELL_SIZE;
+    
     window.create(sf::VideoMode(3360, 2100), "Corovans", sf::Style::Fullscreen);
     Sizeofwin();
-    
-    map = Map::Get();
+    screen_position = Coord(0, 0);
+
     game = Game::Get();
-    
-    elem_size = 100 * square_size / map->map_size;
-    //camel = new Camel();
-    
+    map = game->map;
 }
 
 
@@ -47,10 +40,15 @@ void View::Run()
 {
     Draw();
     
+    sf::Clock clock;
+    
     while (window.isOpen())
     {
-        // проверить все события окна, которые были вызваны с последней итерации цикла
+        float time = clock.getElapsedTime().asMicroseconds();
         sf::Event event;
+        
+        
+        
         while (window.pollEvent(event))
         {
             // "запрос закрытия" событие: мы закрываем окно
@@ -58,14 +56,18 @@ void View::Run()
             if(event.type == sf::Event::Closed)
                 window.close();
             
-            if(event.type == sf::Event::KeyPressed)
-            {
+            if(event.type == sf::Event::KeyPressed) {
                 onkey_delegater->onkey();
             }
             
+            if(sf::Event::Resized)    game->character->speed = 10;
+            
+            /*else {
+                game->character->SetDirection(NO);
+            }*/
+            
             //if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {game->camels[0];}
         }
-        //printf("1\n");
         Draw();
         window.display();
     }
@@ -86,11 +88,27 @@ void View::Sizeofwin()
 {
     sf::Vector2u size = window.getSize();
     
-    x_size = (size.x / square_size) * square_size;
-    y_size = (size.y / square_size) * square_size;
+    x_size = (size.x / cell_size) * cell_size;
+    y_size = (size.y / cell_size) * cell_size;
     
-    x_squares = x_size / square_size;
-    y_squares = y_size / square_size;
+    x_cells = x_size / cell_size;
+    y_cells = y_size / cell_size;
+}
+
+
+void View::SetScreenPosition()
+{
+    Coord p = game->character->position;
+    Coord a = screen_position;
+    
+    screen_position.first = p.first - x_cells / 2;
+    screen_position.second = p.second - y_cells / 2;
+    
+    if(screen_position.first + x_cells >= X_SIZE)   screen_position.first = a.first;
+    if(screen_position.second >= Y_SIZE - y_cells)  screen_position.second = a.second;
+    
+    if(screen_position.first < 0)   screen_position.first = 0;
+    if(screen_position.second < 0)   screen_position.second = 0;
 }
 
 
@@ -108,45 +126,22 @@ View * View::Get()
 void View::Draw()
 {
     window.clear();
-    DrawBackground();
     
-    game->CamelPaint(std::bind(&::View::CamelPainter, this, _1, _2));
-    game->CharacterPaint(std::bind(&View::CharacterPainter, this, _1, _2, _3));
-    game->ObjectsPaint(std::bind(&View::ObjectPainter, this, _1));
+    SetScreenPosition();
+    
+    game->MapPaint(std::bind(&::View::MapPainter, this, _1, _2), screen_position);
+    //game->CamelPaint(std::bind(&::View::CamelPainter, this, _1, _2));
+    game->CharacterPaint(std::bind(&View::ObjectPainter, this, _1, _2, _3));
+    for(auto s : game->objects)
+        game->ObjectsPaint(s, std::bind(&View::ObjectPainter, this, _1, _2, _3));
     return;
 }
 
 
-void View::DrawBackground()
+void View::MapPainter(sf::Sprite sprite, Coord c)
 {
-    for(int i = 0; i < y_squares; i ++) //y_squares
-        for(int j = 0; j < x_squares; j ++) {
-            if(map->map[i * 2][j * 2] == 's') {
-                map->stone.setPosition(j * square_size, i * square_size);
-                window.draw(map->stone);
-            }
-            else {
-            map->sand.setPosition(j * square_size, i * square_size);
-            window.draw(map->sand);
-            }
-        }
-    //map->palm.setPosition(700, 700);
-   //map->pyramid.setPosition(200, 900);
-   // window.draw(map->palm);
-   // window.draw(map->pyramid);
-}
-
-
-void View::CharacterPainter(sf::Sprite s, Coord c, int h)
-{
-    Coord n;
-    n.first = c.first * elem_size;
-    n.second = c.second * elem_size - h;
-    //printf("x = %d, y = %d\n", c.first * elem_size, c.second);
-    //int i = 0;
-    //scanf("%d", &i);
-    s.setPosition(n.first, n.second);
-    window.draw(s);
+    sprite.setPosition((c.first) * CELL_SIZE, (c.second) * CELL_SIZE);
+    window.draw(sprite);
 }
 
 
@@ -159,10 +154,14 @@ void View::CamelPainter(Coord c, L_R_Dir d)
 }
 
 
-void View::ObjectPainter(Object o)
+void View::ObjectPainter(sf::Sprite s, Coord c, int h)
 {
-    o.sprite.setPosition(o.body.back().first, o.body.back().second);
-    window.draw(o.sprite);
+    Coord n;
+    n.first = (c.first - screen_position.first) * CELL_SIZE;
+    n.second = (c.second - screen_position.second - h) * CELL_SIZE;
+    
+    s.setPosition(n.first, n.second);
+    window.draw(s);
 }
 
 

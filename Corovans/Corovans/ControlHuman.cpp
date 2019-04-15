@@ -14,7 +14,7 @@
 ControlHuman::ControlHuman(Character * c):Control(c)
 {
     View * v = View::Get();
-    v->setonkey(this);
+    v->SetOnKey(this);
 }
 
 
@@ -27,26 +27,27 @@ void ControlHuman::onkey()
 {
     Game * g = Game::Get();
     
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))    character->speed = 20;
+    
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         character->SetDirection(RIGHT);
-        //printf("event\n");
-        //if (character->dir == RIGHT) printf("no event\n");
+        g->Move();
     }
     
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         character->SetDirection(LEFT);
+        g->Move();
     }
     
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         character->SetDirection(FORWARD);
+        g->Move();
     }
     
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         character->SetDirection(BACK);
+        g->Move();
     }
-    
-    g->Move();
-    
     
     View * v = View::Get();
     v->Draw();
