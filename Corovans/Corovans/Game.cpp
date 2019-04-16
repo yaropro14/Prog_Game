@@ -98,15 +98,19 @@ void Game::Move()
 
 void Game::MapPaint(MapPainter p, Coord c)
 {
-    for(int y = c.second, j = 0; j < map->y_size; y += map->size_in_cell, j+= map->size_in_cell)
-        for(int x = c.first, i = 0; i < map->y_size; x += map->size_in_cell, i+= map->size_in_cell){
-            if(y == 0 || x == 0)
-                p(map->stone, Coord(i, j));
-            //else if(y >= Y_SIZE - 170 || x >= X_SIZE - 170)
-                //p(map->stone, Coord(i, j));
-            else
-                p(map->sand, Coord(i, j));;
+    for(int y  = 0; y < Y_SIZE; y += map->size_in_cell) {
+        if(y + map->size_in_cell >= c.second)
+            for(int x = 0; x < X_SIZE; x += map->size_in_cell){
+                if(x + map->size_in_cell >= c.first) {
+                    if(y == 0 || x == 0)
+                        p(map->stone, Coord(x, y));
+                    else if(y >= Y_SIZE - 75 || x >= X_SIZE - 70)
+                        p(map->stone, Coord(x, y));
+                    else
+                        p(map->sand, Coord(x, y));;
+                }
         }
+    }
 }
 
 

@@ -58,8 +58,8 @@ public:
     void SetScreenPosition();
     
     void CamelPainter(Coord c, L_R_Dir d);
-    void MapPainter(sf::Sprite sprite, Coord c);
-    void ObjectPainter(sf::Sprite s, Coord c, int h);
+    void MapPainter(sf::Sprite & sprite, Coord c);
+    void ObjectPainter(sf::Sprite & s, Coord c, int h);
     
     sf::RenderWindow window;
     int x_size, y_size;

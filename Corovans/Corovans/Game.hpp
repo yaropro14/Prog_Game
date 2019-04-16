@@ -15,7 +15,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-//#include "View.hpp"
 #include "Object.hpp"
 
 
@@ -43,17 +42,17 @@ enum Dir
 };
 
 
-const int X_SIZE = 4420;
-const int Y_SIZE = 3480;
+const int X_SIZE = 6630;
+const int Y_SIZE = 3780;
 
 
 using Coord = std::pair <int, int>;
 
 
-using CharacterPainter = std::function<void(sf::Sprite, Coord, int)>;
+using CharacterPainter = std::function<void(sf::Sprite &, Coord, int)>;
 using CamelPainter = std::function<void(Coord, L_R_Dir)>;
-using ObjectPainter = std::function<void(sf::Sprite, Coord, int)>;
-using MapPainter = std::function<void(sf::Sprite, Coord)>;
+using ObjectPainter = std::function<void(sf::Sprite &, Coord, int)>;
+using MapPainter = std::function<void(sf::Sprite &, Coord)>;
 
 
 class Map

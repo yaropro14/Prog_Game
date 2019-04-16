@@ -138,9 +138,9 @@ void View::Draw()
 }
 
 
-void View::MapPainter(sf::Sprite sprite, Coord c)
+void View::MapPainter(sf::Sprite & sprite, Coord c)
 {
-    sprite.setPosition((c.first) * CELL_SIZE, (c.second) * CELL_SIZE);
+    sprite.setPosition((c.first - screen_position.first) * CELL_SIZE, (c.second - screen_position.second) * CELL_SIZE);
     window.draw(sprite);
 }
 
@@ -154,7 +154,7 @@ void View::CamelPainter(Coord c, L_R_Dir d)
 }
 
 
-void View::ObjectPainter(sf::Sprite s, Coord c, int h)
+void View::ObjectPainter(sf::Sprite & s, Coord c, int h)
 {
     Coord n;
     n.first = (c.first - screen_position.first) * CELL_SIZE;
