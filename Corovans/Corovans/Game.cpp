@@ -8,55 +8,12 @@
 
 #include "Game.hpp"
 #include "View.hpp"
+//#include "Storage.hpp"
 
 
 Game::Game()
 {
     map = new Map();
-}
-
-
-void Game::CharacterPaint(CharacterPainter p)
-{
-    switch (character->dir) {
-        case ST_BACK:
-            character->sprite.setTextureRect(sf::IntRect(10, 595, 86, 195));
-            break;
-            
-        case ST_FORWARD:
-            character->sprite.setTextureRect(sf::IntRect(194, 595, 78, 178));
-            break;
-            
-        case ST_LEFT:
-            character->sprite.setTextureRect(sf::IntRect(115, 595, 60, 180));
-            break;
-            
-        case ST_RIGHT:
-            character->sprite.setTextureRect(sf::IntRect(175, 595, -60, 180));
-            break;
-            
-        case BACK:
-            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 0, 100, 190));
-            break;
-            
-        case FORWARD:
-            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 205, 100, 187));
-            break;
-            
-        case LEFT:
-            character->sprite.setTextureRect(sf::IntRect(100 * character->step, 394, 100, 183));
-            break;
-            
-        case RIGHT:
-            character->sprite.setTextureRect(sf::IntRect(100 * (character->step + 1), 394, -100, 183));
-            break;
-            
-            
-        default:
-            break;
-    }
-    
-    p(character->sprite, character->position, character->z_size);
 }
 
 
@@ -70,9 +27,10 @@ void Game::CamelPaint(CamelPainter p)
     //}
 }
 
-void Game::ObjectsPaint(Object * o ,ObjectPainter p)
+void Game::ObjectsPaint(ObjectPainter p)
 {
-        p(o->sprite, o->position, o->z_size);
+    for(auto * o : objects)
+        p(o->type, o->position, o->z_size);
 }
 
 void Game::AddObject(Object * o)
@@ -145,38 +103,51 @@ Character::Character()
 void Character::SetDirection(Dir d)
 {
     if(dir != d)    step = 0;
-    /*
-    if(d == NO) {
-        switch (dir) {
-            case BACK:
-                dir = ST_BACK;
-                break;
-                
-            case LEFT:
-                dir = ST_LEFT;
-                break;
-                
-            case FORWARD:
-                dir = ST_FORWARD;
-                break;
-                
-            case RIGHT:
-                dir = ST_RIGHT;
-                break;
-                
-            default:
-                break;
-        }
-    }*/
-    
     dir = d;
+}
+
+bool Check(Coord a, Coord b, int a_x, int b_x, int a_y, int b_y)
+{
+    if(a.first + a_x >= b.first && a.first + a_x <= b.first + b_x)
+    {
+        if(a.second >= b.second && b.second - b_y <= a.second)  return true;
+        if(a.second - a_y >= b.second && b.second - b_y <= a.second - a_y) return true;
+        //return true;
+    }
+    
+    if(b.first <= a.first && b.first + b_x >= a.first)
+    {
+        if(a.second >= b.second && b.second - b_y <= a.second)  return true;
+        if(a.second - a_y >= b.second && b.second - b_y <= a.second - a_y) return true;
+        //return true;
+    }
+//
+    
+    printf("%d %d\n", a.first, a.second);
+    //printf("%d %d\n", a_y, b_y);
+    
+    return false;
+}
+
+
+char Character::CheckPosition(Coord c)
+{
+    
+    for(auto o : Game::Get()->objects)
+    {
+        if(Check(c, o->position, x_size, o->x_size, y_size, o->y_size))    return 'o';
+    }
+    
+    return ' ';
 }
 
 
 void Character::Move()
 {
+    
     switch (dir) {
         case FORWARD:
+//            if(CheckPosition(ChangePosition(position, 0, -speed)) == 'o') {}
             position = ChangePosition(position, 0, -speed);
             step ++;
             step = step % 8;
@@ -184,6 +155,7 @@ void Character::Move()
             break;
             
         case BACK:
+//            if(CheckPosition(ChangePosition(position, 0, speed)) == 'o') {}
             position = ChangePosition(position, 0, speed);
             step ++;
             step = step % 8;
@@ -191,6 +163,7 @@ void Character::Move()
             break;
             
         case LEFT:
+//            if(CheckPosition(ChangePosition(position, -speed, 0)) == 'o') {}
             position = ChangePosition(position, -speed, 0);
             step ++;
             step = step % 8;
@@ -198,9 +171,11 @@ void Character::Move()
             break;
             
         case RIGHT:
+//            if(CheckPosition(ChangePosition(position, speed, 0)) == 'o') {}
             position = ChangePosition(position, speed, 0);
             step ++;
             step = step % 8;
+            if(step == 0)   step++;
             dir = RIGHT;
             break;
             

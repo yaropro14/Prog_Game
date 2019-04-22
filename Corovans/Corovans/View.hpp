@@ -10,11 +10,15 @@
 #define View_hpp
 
 
+#include <variant>
+
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
 #include "Game.hpp"
 #include "Keypressable.hpp"
+#include "Tree.hpp"
+#include "Storage.hpp"
 
 
 using movable = std::function<void()>;
@@ -54,12 +58,16 @@ public:
     
     void Run();
     void Draw();
+    void DrawLevel(Node * tree);
     void Sizeofwin();
     void SetScreenPosition();
     
     void CamelPainter(Coord c, L_R_Dir d);
     void MapPainter(sf::Sprite & sprite, Coord c);
-    void ObjectPainter(sf::Sprite & s, Coord c, int h);
+    void ObjectPainter(SPRITE_TYPE type, Coord c, int h);
+    void CharacterPainter(Character * c, sf::Sprite sprite);
+    
+    Storage * storage;
     
     sf::RenderWindow window;
     int x_size, y_size;

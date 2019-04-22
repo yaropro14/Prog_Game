@@ -10,17 +10,21 @@
 #include <fstream>
 #include <stdio.h>
 
-using namespace std::placeholders;
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-#include "Game.hpp"
 #include "View.hpp"
 
 
+using namespace std::placeholders;
+
 static void Sizechange(int y);
+
+
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 
 View::View()
@@ -30,6 +34,8 @@ View::View()
     window.create(sf::VideoMode(3360, 2100), "Corovans", sf::Style::Fullscreen);
     Sizeofwin();
     screen_position = Coord(0, 0);
+    
+    storage = new Storage();
 
     game = Game::Get();
     map = game->map;
@@ -129,14 +135,38 @@ void View::Draw()
     
     SetScreenPosition();
     
+    
+    Node * draw_tree = nullptr;
+    
     game->MapPaint(std::bind(&::View::MapPainter, this, _1, _2), screen_position);
     //game->CamelPaint(std::bind(&::View::CamelPainter, this, _1, _2));
-    game->CharacterPaint(std::bind(&View::ObjectPainter, this, _1, _2, _3));
-    for(auto s : game->objects)
-        game->ObjectsPaint(s, std::bind(&View::ObjectPainter, this, _1, _2, _3));
+    draw_tree = draw_tree->AddNode(draw_tree, nullptr, game->character);
+    //game->CharacterPaint(std::bind(&View::ObjectPainter, this, _1, _2, _3));
+    
+    CharacterPainter(game->character, storage->GetSprite(CHARACTER));
+    
+        game->ObjectsPaint(std::bind(&View::ObjectPainter, this, _1, _2, _3));
+        //draw_tree = draw_tree->AddNode(draw_tree, nullptr, s);
     return;
 }
 
+/*
+void View::DrawLevel(Node * tree)
+{
+    if (tree == NULL)
+        return;
+    
+    //printf("\n|%p|\n", tree->parent);
+    DrawLevel(tree->left);
+    
+    std::visit(overloaded {
+        [](Character * arg) { ChsPainter(coo))
+        [](Object * arg) { },
+    }, tree->val);
+    
+    DrawLevel(tree->right);
+}
+*/
 
 void View::MapPainter(sf::Sprite & sprite, Coord c)
 {
@@ -154,16 +184,29 @@ void View::CamelPainter(Coord c, L_R_Dir d)
 }
 
 
-void View::ObjectPainter(sf::Sprite & s, Coord c, int h)
+void View::ObjectPainter(SPRITE_TYPE type, Coord c, int h)
 {
     Coord n;
+    
+    sf::Sprite s = storage->GetSprite(type);
+    
     n.first = (c.first - screen_position.first) * CELL_SIZE;
     n.second = (c.second - screen_position.second - h) * CELL_SIZE;
     
     s.setPosition(n.first, n.second);
     window.draw(s);
 }
-
+               
+void View::CharacterPainter(Character * c, sf::Sprite sprite)
+{
+    Coord n;
+    
+    n.first = (c->position.first - screen_position.first) * CELL_SIZE;
+    n.second = (c->position.second - screen_position.second - c->z_size) * CELL_SIZE;
+    
+    sprite.setPosition(n.first, n.second);
+    window.draw(sprite);
+}
 
 View::~View()
 {

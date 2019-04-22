@@ -1,0 +1,5 @@
+/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Pyramid.png
+/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Scelet.png
+/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/S_stone.png
+/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/Greenery.png
+/Users/yaroslav/Desktop/Proga/Proj_Game/Corovans/Corovans/Resorses/DryTree.png

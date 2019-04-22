@@ -11,9 +11,11 @@
 
 #include <stdio.h>
 #include <list>
+#include "Storage.hpp"
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+
 
 using Coord = std::pair <int, int>;
 
@@ -31,6 +33,8 @@ public:
     unsigned int x_size;
     unsigned int y_size;
     unsigned int z_size;
+    
+    SPRITE_TYPE type;
 };
 
 class Pyramid : public Object

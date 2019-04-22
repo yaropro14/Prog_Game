@@ -16,6 +16,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "Object.hpp"
+//#include "Storage.hpp"
+
+//using SPRITE_TYPE;
 
 
 const int CELL_SIZE = 1;
@@ -30,28 +33,27 @@ enum L_R_Dir
 
 enum Dir
 {
-    RIGHT,
-    LEFT,
-    FORWARD,
-    BACK,
-    ST_RIGHT,
-    ST_LEFT,
-    ST_FORWARD,
     ST_BACK,
+    ST_FORWARD,
+    ST_LEFT,
+    ST_RIGHT,
+    BACK,
+    FORWARD,
+    LEFT,
+    RIGHT,
     NO
 };
 
 
 const int X_SIZE = 6630;
-const int Y_SIZE = 3780;
+const int Y_SIZE = 3770;
 
 
 using Coord = std::pair <int, int>;
 
 
-using CharacterPainter = std::function<void(sf::Sprite &, Coord, int)>;
 using CamelPainter = std::function<void(Coord, L_R_Dir)>;
-using ObjectPainter = std::function<void(sf::Sprite &, Coord, int)>;
+using ObjectPainter = std::function<void(SPRITE_TYPE, Coord, int)>;
 using MapPainter = std::function<void(sf::Sprite &, Coord)>;
 
 
@@ -124,6 +126,7 @@ public:
     
     void Move();
     void SetDirection(Dir d);
+    char CheckPosition(Coord c);
     
     sf::Texture texture;
     sf::Sprite sprite;
@@ -153,10 +156,8 @@ public:
     Map * map;
     std::list <Object *> objects;
     
-    
-    void CharacterPaint(CharacterPainter p);
     void CamelPaint(CamelPainter p);
-    void ObjectsPaint(Object * o ,ObjectPainter p);
+    void ObjectsPaint(ObjectPainter p);
     void MapPaint(MapPainter p, Coord c);
     
     void Move();

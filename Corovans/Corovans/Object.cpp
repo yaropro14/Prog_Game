@@ -25,7 +25,9 @@ Pyramid::Pyramid(Coord c)
     
     x_size =  299 / CELL_SIZE;
     y_size =  299 / CELL_SIZE;
-    z_size =  260 / CELL_SIZE;
+    z_size =  texture.getSize().y / CELL_SIZE;
+    
+    type = PYRAMID;
     
     position = c;
     
@@ -45,6 +47,8 @@ Scelet::Scelet(Coord c)
     y_size =  78 / CELL_SIZE;
     z_size =  91 / CELL_SIZE;
     
+    type = SCELET;
+    
     position = c;
 }
 
@@ -61,6 +65,8 @@ Stone::Stone(Coord c)
     x_size =  65 / CELL_SIZE;
     y_size =  65 / CELL_SIZE;
     z_size =  52 / CELL_SIZE;
+    
+    type = STONE;
     
     position = c;
 }
@@ -79,6 +85,8 @@ Greenery::Greenery(Coord c)
     y_size =  309 / CELL_SIZE;
     z_size =  286 / CELL_SIZE;
     
+    type = GREENERY;
+    
     position = c;
 }
 
@@ -95,6 +103,8 @@ Tree::Tree(Coord c)
     x_size =  91 / CELL_SIZE;
     y_size =  91 / CELL_SIZE;
     z_size =  338 / CELL_SIZE;
+    
+    type = TREE;
     
     position = c;
 }
