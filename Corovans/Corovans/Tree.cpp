@@ -24,7 +24,7 @@ Node::~Node()
 }
 
 
-Node * Node::AddNode(Node * node, Node * parent, Var_t value)
+Node * Node::AddNode(Node * node, Node * parent, Object * value)
 {
     if (node == nullptr)
     {
@@ -38,8 +38,8 @@ Node * Node::AddNode(Node * node, Node * parent, Var_t value)
     
     else
     {
-        Coord c = GetCoord(value);
-        Coord valc = GetCoord(val.front());
+        Coord c = node->val.front()->position;;
+        Coord valc = value->position;
         
         if (c.second == valc.second)
             val.push_back(value);
@@ -53,16 +53,4 @@ Node * Node::AddNode(Node * node, Node * parent, Var_t value)
     }
     
     return node;
-}
-
-
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
-
-Coord GetCoord(Var_t x)
-{
-    return std::visit(overloaded {
-        [](Character * arg) { return arg->position;},
-        [](Object * arg) { return arg->position;},
-    }, x);
 }

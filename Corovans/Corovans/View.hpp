@@ -6,6 +6,9 @@
 //  Copyright © 2019 Yaroslav. All rights reserved.
 //
 
+#include <poll.h>
+#include <time.h>
+
 #ifndef View_hpp
 #define View_hpp
 
@@ -19,9 +22,14 @@
 #include "Keypressable.hpp"
 #include "Tree.hpp"
 #include "Storage.hpp"
+//#include "Sound.hpp"
 
 
 using movable = std::function<void()>;
+using timeoutable = std::function<void()>;
+
+
+class SnakeAI;
 
 
 class View
@@ -36,10 +44,14 @@ public:
     Keypressable * onkey_delegater;
     std::list <std::pair < long, movable>> ontime_deligater;
     
+    
+    long min_game_time;
+    
     void SetOnKey(Keypressable * key)
     {
         onkey_delegater = key;
     }
+    
     
     void SetOnTimer(struct timespec timeout, movable t)
     {
@@ -48,7 +60,6 @@ public:
         n.first = timeout.tv_nsec / 1000000 + timeout.tv_sec * 1000;
         n.second = t;
         
-        //if(ontime_deligater.front().first >= n.first) ontime_deligater.push_front(n);
         ontime_deligater.push_back(n);
     }
     
@@ -58,13 +69,15 @@ public:
     
     void Run();
     void Draw();
+    void DrawSistemCharacteristics();
     void DrawLevel(Node * tree);
     void Sizeofwin();
     void SetScreenPosition();
+    bool GetKey(long time);
     
-    void CamelPainter(Coord c, L_R_Dir d);
+    void SnakePainter(SPRITE_TYPE type, Coord c, int h, Object * o);
     void MapPainter(sf::Sprite & sprite, Coord c);
-    void ObjectPainter(SPRITE_TYPE type, Coord c, int h);
+    void ObjectPainter(SPRITE_TYPE type, Coord c, int h, Object * o);
     void CharacterPainter(Character * c, sf::Sprite sprite);
     
     Storage * storage;

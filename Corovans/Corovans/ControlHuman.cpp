@@ -23,32 +23,49 @@ ControlHuman::~ControlHuman()
 }
 
 
-void ControlHuman::onkey()
+bool ControlHuman::onkey()
 {
     Game * g = Game::Get();
     
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))    character->speed = 20;
     
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::H) && !character->hit){
+        character->step = 1;
+        //character->speed = 0;
+        character->hit = true;
+    }
+    
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !character->rob){
+        character->rob = true;
+        character->step = 1;
+    }
+    
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        character->SetDirection(RIGHT);
-        g->Move();
+        return character->SetDirection(RIGHT);
+//        g->character->Move();
+        //g->Move();
     }
     
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        character->SetDirection(LEFT);
-        g->Move();
+        return character->SetDirection(LEFT);
+//        g->character->Move();
+//        g->Move();
     }
     
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        character->SetDirection(FORWARD);
-        g->Move();
+        return character->SetDirection(FORWARD);
+//        g->character->Move();
+//        g->Move();
     }
     
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        character->SetDirection(BACK);
-        g->Move();
+        return character->SetDirection(BACK);
+//        g->character->Move();
+//        g->Move();
     }
     
+    
     View * v = View::Get();
-    v->Draw();
+//    v->Draw();
+    return false;
 }

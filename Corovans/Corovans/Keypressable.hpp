@@ -14,7 +14,7 @@
 class Keypressable
 {
 public:
-    virtual void onkey() = 0;
+    virtual bool onkey() = 0;
 };
 
 #endif /* Keypressable_hpp */

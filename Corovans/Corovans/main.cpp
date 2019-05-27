@@ -6,40 +6,47 @@
 //  Copyright © 2019 Yaroslav. All rights reserved.
 //
 
+
+#include <time.h>
+
+
 #include <stdio.h>
 
 #include "View.hpp"
 #include "Game.hpp"
 #include "Control.hpp"
 #include "ControlHuman.hpp"
+#include "AI.hpp"
+#include "Sound.hpp"
 
 
 int main()
 {
+    srand(time(NULL));
+    
     View * v = View::Get();
     Game * g = Game::Get();
     
     Character * c = new Character;
     
-    g->character = c;
+    g->character = (Character *) c;
+    
+    Sounds * s = new Sounds();
+    
+    g->SetSound(s);
+    
+    Corovan * corovan = new Corovan();
+    g->corovan = corovan;
+    
+    g->CreateField();
+    
+    g->NewLife();
     
     v->set_model(g);
     
-    ControlHuman h(c);
+    ControlHuman h((Character *)c);
     
-    Object * pyr = new Pyramid(Coord(400, 800));
-    Object * gre = new Greenery(Coord(2000, 600));
-    Object * sto = new Stone(Coord(600,1600));
-    Object * tre = new Tree(Coord(3000, 1400));
-    Object * sce = new Scelet(Coord(1500, 1300));
-    
-    g->AddObject(pyr);
-    g->AddObject(gre);
-    g->AddObject(sto);
-    g->AddObject(sce);
-    g->AddObject(tre);
-    
-    //v->Draw();
+    g->Move();
     v->Run();
     return 0;
 }

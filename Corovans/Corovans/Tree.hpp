@@ -16,13 +16,10 @@
 #include "Game.hpp"
 
 
-using Var_t = std::variant<Character *, Object *>;
-
-
 class Node
 {
 public:
-    std::list <Var_t> val;       // value
+    std::list <Object *> val;       // value
     
     struct Node * left;      // left child
     struct Node * right;     // right child
@@ -31,12 +28,8 @@ public:
     Node();
     ~Node();
     
-    Node * AddNode(Node * node, Node * parent, Var_t val);
-    //void NodePrint(Node * node);
+    Node * AddNode(Node * node, Node * parent, Object * val);
 };
-
-
-Coord GetCoord(Var_t x);
 
 
 #endif /* Tree_hpp */

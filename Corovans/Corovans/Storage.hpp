@@ -9,6 +9,8 @@
 //#include "Game.hpp"
 
 class Game;
+class Object;
+
 
 #ifndef Drowable_hpp
 #define Drowable_hpp
@@ -29,7 +31,12 @@ enum SPRITE_TYPE
     SCELET,
     STONE,
     GREENERY,
-    TREE
+    TREE,
+    LIFE,
+    BRILLIANT,
+    CAMEL,
+    SNAKE,
+    BORDER
 };
 
 
@@ -60,6 +67,30 @@ public:
 };
 
 
+class DrwSnake : public Drawable
+{
+public:
+    DrwSnake();
+    ~DrwSnake();
+    sf::Sprite SetSprite(Object * o);
+    
+    Game * game;
+};
+
+
+class DrwCamel : public Drawable
+{
+public:
+    DrwCamel();
+    ~DrwCamel();
+    sf::Sprite SetSprite();
+    
+    Game * game;
+    
+    int x, y;
+};
+
+
 class DrwObject : public Drawable
 {
 public:
@@ -70,8 +101,43 @@ public:
     
     Game * game;
     
-    sf::Sprite sprites[5];
-    sf::Texture textures[5];
+    sf::Sprite sprites[7];
+    sf::Texture textures[7];
+};
+
+
+class SistemSprites
+{
+public:
+    SistemSprites();
+    ~SistemSprites();
+    
+    sf::Texture t_life;
+    sf::Sprite life;
+    
+    sf::Texture t_b_life;
+    sf::Sprite b_life;
+    
+    sf::Texture t_num;
+    sf::Sprite num;
+    
+    sf::Texture t_wpoint;
+    sf::Sprite wpoint;
+    
+    sf::Texture t_bril;
+    sf::Sprite bril;
+    
+    sf::Texture t_menu;
+    sf::Sprite menu;
+    
+    sf::Texture t_menu2;
+    sf::Sprite menu2;
+    
+    sf::Texture t_menu3;
+    sf::Sprite menu3;
+    
+    sf::Texture t_menu4;
+    sf::Sprite menu4;
 };
 
 
@@ -84,12 +150,14 @@ public:
     int num;
     
     DrwCharacter * c;
-    DrwObject * o;
+    DrwObject * so;
+    DrwCamel * ca;
+    DrwSnake * s;
+    SistemSprites * ss;
     
     std::vector <Drawable *>  drw;
     
-    sf::Sprite GetSprite(SPRITE_TYPE type);
-    
+    sf::Sprite GetSprite(SPRITE_TYPE type, Object * o);
 };
 
 #endif /* Drowable_hpp */

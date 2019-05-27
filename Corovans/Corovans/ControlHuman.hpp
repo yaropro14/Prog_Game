@@ -20,7 +20,7 @@ class ControlHuman : public Control
 public:
     ControlHuman(Character * c);
     ~ControlHuman();
-    void onkey();
+    bool onkey();
 };
 
 #endif /* ControlHuman_hpp */

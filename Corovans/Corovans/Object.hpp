@@ -11,22 +11,43 @@
 
 #include <stdio.h>
 #include <list>
+#include <iostream>
+#include <cstdlib>
+
+
 #include "Storage.hpp"
+#include "Figure.hpp"
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
 
-using Coord = std::pair <int, int>;
+enum L_R_Dir
+{
+    R,
+    L,
+    N
+};
+
+enum Dir
+{
+    ST_BACK,
+    ST_FORWARD,
+    ST_LEFT,
+    ST_RIGHT,
+    BACK,
+    FORWARD,
+    LEFT,
+    RIGHT,
+    NO
+};
+
 
 class Object
 {
 public:
     Object();
     ~Object();
-    
-    sf::Texture texture;
-    sf::Sprite sprite;
     
     Coord position;
     
@@ -35,6 +56,10 @@ public:
     unsigned int z_size;
     
     SPRITE_TYPE type;
+    int step;
+    Dir dir;
+    
+    Figure figure;
 };
 
 class Pyramid : public Object
@@ -57,6 +82,23 @@ public:
     Stone(Coord c);
     ~Stone();
 };
+
+
+class Life : public Object
+{
+public:
+    Life(Coord c);
+    ~Life();
+};
+
+
+class Brilliant : public Object
+{
+public:
+    Brilliant(Coord c);
+    ~Brilliant();
+};
+
 
 class Greenery : public Object
 {
